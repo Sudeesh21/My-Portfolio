@@ -1,0 +1,34 @@
+
+/* Add transitions for the hover effect */
+#about img {
+    transition: transform 0.4s ease-out, box-shadow 0.4s ease-out;
+}
+
+/* Add a "grow" and "glow" effect on hover */
+#about img:hover {
+    transform: scale(1.05);
+    /* A colorful teal glow */
+    box-shadow: 0 0 30px rgba(45, 212, 191, 0.4); 
+}
+
+
+/* --- NEW: Interactive Project Card Effects --- */
+
+/* Add a "grow" and "glow" to the card itself on hover */
+#projects .card:hover {
+    transform: translateY(-5px);
+    /* A colorful blue/teal glow */
+    box-shadow: 0 10px 30px rgba(29, 78, 216, 0.2);
+}
+
+/* Add transitions for the image inside the card */
+#projects .card img {
+    transition: transform 0.5s ease-out, filter 0.5s ease-out;
+    filter: saturate(100%) brightness(100%); /* Set the default state */
+}
+
+/* On card hover, "grow" and make the image more "colorful" */
+#projects .card:hover img {
+    transform: scale(1.1);
+    filter: saturate(130%) brightness(1.05); /* More colorful! */
+}

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUDEESH K - Professional Portfolio</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // This enables class-based dark mode
+            theme: {
+                extend: {
+                    fontFamily: { 'sans': ['Inter', 'sans-serif'] },
+                    animation: {
+                        'fade-in-up': 'fade-in-up 0.8s ease-out forwards',
+                        'blink-caret': 'blink-caret .75s step-end infinite',
+                        /* --- NEW: Animated Gradient for Name --- */
+                        'text-gradient-pan': 'text-gradient-pan 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        'blink-caret': {
+                            '0%, 100%': { borderColor: 'transparent' },
+                            '50%': { borderColor: 'currentColor' }
+                        },
+                        'fade-in-up': {
+                            from: { opacity: '0', transform: 'translateY(20px)' },
+                            to: { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        /* --- NEW: Keyframe for Name --- */
+                        'text-gradient-pan': {
+                             '0%': { backgroundPosition: '0% 50%' },
+                             '50%': { backgroundPosition: '100% 50%' },
+                             '100%': { backgroundPosition: '0% 50%' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        /* --- Simple Light/Dark Mode Background --- */
+        body {
+            @apply font-sans transition-colors duration-300;
+            @apply bg-white text-gray-900;
+            @apply dark:bg-gray-900 dark:text-gray-200;
+            /* --- NEW: Hide default cursor --- */
+            @apply cursor-none;
+        }
+
+        /* --- Animated Nav Links --- */
+        .nav-item {
+            @apply relative text-gray-700;
+            @apply dark:text-gray-300 dark:hover:text-teal-400 transition duration-300;
+        }
+        .nav-item::after {
+            content: '';
+            @apply absolute -bottom-1 left-0 w-full h-0.5 bg-teal-500 dark:bg-teal-400;
+            @apply scale-x-0 origin-left transition-transform duration-300 ease-in-out;
+        }
+        .nav-item:hover::after {
+            @apply scale-x-100;
+        }
+
+        .mobile-item {
+            @apply block py-3 px-6 text-gray-700 hover:bg-gray-100;
+            @apply dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-teal-400;
+        }
+
+        .text-gradient {
+            @apply bg-gradient-to-r from-blue-400 via-teal-400 to-green-400 bg-clip-text text-transparent;
+        }
+        
+        /* --- NEW: Animated Text Gradient for Name --- */
+        .text-gradient-animated {
+            @apply bg-clip-text text-transparent;
+            background-image: linear-gradient(
+                -45deg,
+                #22d3ee, /* cyan-400 */
+                #3b82f6, /* blue-500 */
+                #a855f7, /* purple-500 */
+                #ec4899  /* pink-500 */
+            );
+            background-size: 200% 200%;
+            @apply animate-text-gradient-pan;
+        }
+        /* --- End Animated Text --- */
+
+        .btn-primary {
+            @apply px-6 py-3 bg-gradient-to-r from-blue-500 to-teal-500 text-white font-semibold rounded-lg shadow-lg hover:scale-105 transition-all duration-300;
+        }
+        .btn-primary:active {
+            @apply scale-95 shadow-inner;
+        }
+
+        .btn-secondary {
+            @apply px-6 py-3 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 shadow transition-all duration-300 hover:scale-105;
+            @apply dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600;
+        }
+        .btn-secondary:active {
+            @apply scale-95 shadow-inner;
+        }
+
+        .section-title {
+            @apply text-4xl font-bold text-center mb-10 text-black;
+            @apply dark:text-white;
+        }
+
+        .card {
+            @apply bg-white/50 backdrop-blur-md rounded-2xl shadow-xl border border-gray-100;
+            @apply dark:bg-gray-800/50 dark:border-gray-700/50;
+            @apply transition-all duration-300 ease-in-out;
+            @apply hover:shadow-2xl hover:shadow-teal-500/20 dark:hover:shadow-teal-400/10;
+        }
+
+        .input {
+            @apply w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-teal-400 transition-colors duration-300;
+            @apply dark:bg-gray-700 dark:border-gray-600 dark:text-white;
+            @apply focus:border-transparent focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-900;
+        }
+
+        .label {
+            @apply block text-sm font-medium text-gray-700 mb-2;
+            @apply dark:text-gray-300;
+        }
+
+        .skill {
+            @apply bg-teal-500/10 text-teal-700 px-4 py-1.5 rounded-full text-sm font-medium;
+            @apply dark:bg-teal-500/20 dark:text-teal-300;
+            @apply transition-all duration-300 ease-in-out;
+        }
+        .skill:hover {
+            @apply scale-110 shadow-md shadow-teal-500/20 dark:shadow-teal-400/10;
+        }
+
+        .alert {
+            @apply p-4 rounded-lg mb-4 text-center font-medium;
+        }
+        .alert.success {
+            @apply bg-green-500/10 text-green-700;
+            @apply dark:bg-green-500/20 dark:text-green-300;
+        }
+        .alert.error {
+            @apply bg-red-500/10 text-red-700;
+            @apply dark:bg-red-500/20 dark:text-red-300;
+        }
+
+        .theme-toggle-btn {
+            @apply w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300;
+            @apply text-gray-700 hover:bg-gray-100;
+            @apply dark:text-gray-300 dark:hover:bg-gray-700;
+        }
+        .theme-toggle-btn:active {
+            @apply scale-90;
+        }
+
+        .hover-photo {
+            transition: transform 0.4s ease-out, box-shadow 0.4s ease-out, filter 0.5s ease-out;
+            filter: saturate(100%);
+        }
+        .hover-photo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(45, 212, 191, 0.5); 
+            filter: saturate(120%); 
+        }
+        
+        /* --- NEW: Custom Cursor Styles --- */
+        .cursor-dot {
+            @apply w-2 h-2 bg-teal-500 rounded-full;
+            @apply fixed top-0 left-0 -translate-x-1/2 -translate-y-1/2 z-[100];
+            @apply pointer-events-none transition-transform duration-100;
+        }
+        .cursor-outline {
+            @apply w-8 h-8 border-2 border-teal-500 rounded-full;
+            @apply fixed top-0 left-0 -translate-x-1/2 -translate-y-1/2 z-[100];
+            @apply pointer-events-none transition-all duration-300 ease-out;
+        }
+        .cursor-outline.hovered {
+            @apply scale-150 opacity-50 bg-teal-500/20; /* Grow effect */
+        }
+        /* --- End Cursor Styles --- */
+
+        /* --- NEW: Back to Top Button Styles --- */
+        .back-to-top {
+            @apply fixed bottom-6 right-6 w-12 h-12 rounded-full;
+            @apply bg-teal-500/80 text-white backdrop-blur-sm shadow-lg;
+            @apply flex items-center justify-center;
+            @apply opacity-0 pointer-events-none transition-all duration-300;
+            @apply hover:bg-teal-500 hover:scale-110;
+        }
+        .back-to-top.show {
+            @apply opacity-100 pointer-events-auto;
+        }
+        /* --- End Back to Top --- */
+
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <header class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700/50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-black dark:text-white">MY <span class="text-teal-400">PORTFOLIO</span></a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#about" class="nav-item">About</a>
+                <a href="#projects" class="nav-item">Projects</a>
+                <a href="#contact" class="nav-item">Contact</a>
+
+                <button id="theme-toggle-btn" class="theme-toggle-btn">
+                    <i id="theme-icon-sun" class="fas fa-sun text-lg"></i>
+                    <i id="theme-icon-moon" class="fas fa-moon text-lg hidden"></i>
+                </button>
+            </div>
+
+            <div class="flex md:hidden items-center space-x-4">
+                <button id="theme-toggle-btn-mobile" class="theme-toggle-btn">
+                    <i id="theme-icon-sun-mobile" class="fas fa-sun text-lg"></i>
+                    <i id="theme-icon-moon-mobile" class="fas fa-moon text-lg hidden"></i>
+                </button>
+                
+                <button id="mobile-menu-btn" class="text-gray-700 dark:text-gray-300 hover:text-teal-400">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </nav>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800">
+            <a href="#about" class="mobile-item">About</a>
+            <a href="#projects" class="mobile-item">Projects</a>
+            <a href="#contact" class="mobile-item">Contact</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <section id="hero" class="min-h-[70vh] flex flex-col md:flex-row items-center justify-between py-20 opacity-0">
+            <div class="md:w-1/2 text-center md:text-left">
+                <span class="text-lg text-teal-400">Hello, I'm</span>
+                <h1 class="text-6xl font-extrabold text-gradient-animated">SUDEESH K</h1> 
+                <h2 id="typing-headline"
+                    class="text-3xl font-medium text-gradient border-r-4 border-teal-400 overflow-hidden whitespace-nowrap h-12 animate-blink-caret mt-4">
+                </h2>
+
+                <p class="text-gray-600 dark:text-gray-400 text-lg mt-4 max-w-lg">
+                    I build beautiful, responsive, and user-centric applications.
+                </p>
+
+                <div class="mt-6 flex space-x-4 justify-center md:justify-start">
+                    <a href="#projects" class="btn-primary">View My Work</a>
+                    <a href="#contact" class="btn-secondary">Get In Touch</a>
+                </div>
+            </div>
+
+            <div class="md:w-1/2 flex justify-center mt-10 md:mt-0">
+                <div class="w-72 h-71 rounded-full bg-gray-100 dark:bg-gray-800 border-4 border-gray-300/50 dark:border-teal-400/50 flex items-center justify-center overflow-hidden">
+                    
+                    <img src="images/Sudeesh Profile Photo.jpeg" 
+                         alt="A photo of Sudeesh K" 
+                         class="w-full h-full object-cover hover-photo">
+
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="py-24 opacity-0">
+            <h2 class="section-title">About <span class="text-gradient">Me</span></h2>
+
+            <div class="card p-10">
+                <div class="flex flex-col md:flex-row gap-10">
+                    
+                    <img src="images/Sudeesh Photo.jpeg"
+                         alt="A professional headshot of Sudeesh K"
+                         class="w-48 h-48 rounded-full border-4 border-gray-200 dark:border-gray-700 shadow-lg mx-auto md:mx-0 hover-photo">
+
+                    <div class="w-full">
+                        <h3 class="text-3xl font-bold text-black dark:text-white mb-4 text-gradient">Who Am I?</h3>
+                        <p class="text-gray-700 dark:text-gray-300 text-lg mb-4">
+                            Hello! I'm Sudeesh, a passionate developer who loves turning ideas into real digital solutions.
+                        </p>
+
+                        <h4 class="text-2xl font-semibold text-black dark:text-white mb-4 text-gradient">Core Skills</h4>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="skill">JavaScript</span>
+                            <span class="skill">React.js</span>
+                            <span class="skill">Node.js</span>
+                            <span class="skill">Tailwind CSS</span>
+                            <span class="skill">Git & GitHub</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="projects" class="py-24 opacity-0">
+            <h2 class="section-title">My <span class="text-gradient">Projects</span></h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                
+                <div class="card overflow-hidden">
+                    <img src="images/Project-1.png" alt="Project 1" class="w-full h-56 object-cover hover-photo">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-black dark:text-white mb-2">Project Title One</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">
+                            A brief description of the project.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="skill">React</span>
+                            <span class="skill">Node.js</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card overflow-hidden">
+                    <img src="https://placehold.co/600x400/374151/9ca3af?text=Project+2" alt="Project 2" class="w-full h-56 object-cover hover-photo">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-black dark:text-white mb-2">Project Title Two</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">A brief description of the project.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="skill">Vue.js</span>
+                            <span class="skill">Firebase</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card overflow-hidden">
+                    <img src="https://placehold.co/600x400/374151/9ca3af?text=Project+3" alt="Project 3" class="w-full h-56 object-cover hover-photo">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-black dark:text-white mb-2">Project Title Three</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">A brief description of the project.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="skill">HTML5</span>
+                            <span class="skill">CSS3</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-24 opacity-0">
+            <h2 class="section-title">Get In <span class="text-gradient">Touch</span></h2>
+
+            <div class="card max-w-2xl mx-auto p-10">
+
+                <form id="contact-form">
+
+                    <input type="hidden" id="form-time" name="time">
+
+                    <div id="form-success" class="alert success hidden">
+                        Your message has been sent successfully!
+                    </div>
+
+                    <div id="form-error" class="alert error hidden">
+                        Error sending message. Try again.
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="label">Name</label>
+                            <input class="input" type="text" name="name" required>
+                        </div>
+
+                        <div>
+                            <label class="label">Email</label>
+                            <input class="input" type="email" name="email" required>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <label class="label">Message</label>
+                        <textarea name="message" rows="5" class="input" required></textarea>
+                    </div>
+
+                    <button id="submit-btn" type="submit" class="btn-primary w-full mt-6 flex items-center justify-center">
+                        <span id="btn-text">Send Message</span>
+                        <span id="btn-loading" class="hidden ml-2">
+                            <i class="fas fa-spinner animate-spin"></i>
+                        </span>
+                    </button>
+
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-100 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-6 text-center">
+        <p class="text-gray-600 dark:text-gray-400">&copy; <span id="current-year"></span> SUDEESH K</p>
+    </footer>
+
+    <a href="#" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <script src="script.js" defer></script>
+
+</body>
+</html>
