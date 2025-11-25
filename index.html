@@ -11,17 +11,18 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
+    <link rel="stylesheet" href="style.css">
+
     <script>
         tailwind.config = {
-            darkMode: 'class', // This enables class-based dark mode
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: { 'sans': ['Inter', 'sans-serif'] },
                     animation: {
                         'fade-in-up': 'fade-in-up 0.8s ease-out forwards',
                         'blink-caret': 'blink-caret .75s step-end infinite',
-                        /* --- NEW: Animated Gradient for Name --- */
-                        'text-gradient-pan': 'text-gradient-pan 6s ease-in-out infinite',
+                        'bounce-slow': 'bounce 2s infinite',
                     },
                     keyframes: {
                         'blink-caret': {
@@ -31,12 +32,6 @@
                         'fade-in-up': {
                             from: { opacity: '0', transform: 'translateY(20px)' },
                             to: { opacity: '1', transform: 'translateY(0)' }
-                        },
-                        /* --- NEW: Keyframe for Name --- */
-                        'text-gradient-pan': {
-                             '0%': { backgroundPosition: '0% 50%' },
-                             '50%': { backgroundPosition: '100% 50%' },
-                             '100%': { backgroundPosition: '0% 50%' },
                         }
                     }
                 }
@@ -49,18 +44,17 @@
         @tailwind components;
         @tailwind utilities;
 
-        /* --- Simple Light/Dark Mode Background --- */
+        /* --- Global Styles --- */
         body {
             @apply font-sans transition-colors duration-300;
-            @apply bg-white text-gray-900;
+            @apply bg-gray-50 text-gray-900;
             @apply dark:bg-gray-900 dark:text-gray-200;
-            /* --- NEW: Hide default cursor --- */
-            @apply cursor-none;
+            @apply cursor-none; /* Custom cursor enabled */
         }
 
-        /* --- Animated Nav Links --- */
+        /* --- Navigation --- */
         .nav-item {
-            @apply relative text-gray-700;
+            @apply relative text-gray-700 font-medium;
             @apply dark:text-gray-300 dark:hover:text-teal-400 transition duration-300;
         }
         .nav-item::after {
@@ -73,148 +67,113 @@
         }
 
         .mobile-item {
-            @apply block py-3 px-6 text-gray-700 hover:bg-gray-100;
+            @apply block py-3 px-6 text-gray-700 hover:bg-gray-100 font-medium;
             @apply dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-teal-400;
         }
 
+        /* --- Typography --- */
         .text-gradient {
-            @apply bg-gradient-to-r from-blue-400 via-teal-400 to-green-400 bg-clip-text text-transparent;
+            @apply bg-gradient-to-r from-blue-500 via-teal-400 to-green-400 bg-clip-text text-transparent;
         }
         
-        /* --- NEW: Animated Text Gradient for Name --- */
         .text-gradient-animated {
             @apply bg-clip-text text-transparent;
-            background-image: linear-gradient(
-                -45deg,
-                #22d3ee, /* cyan-400 */
-                #3b82f6, /* blue-500 */
-                #a855f7, /* purple-500 */
-                #ec4899  /* pink-500 */
-            );
+            background-image: linear-gradient(-45deg, #22d3ee, #3b82f6, #a855f7, #ec4899);
             background-size: 200% 200%;
-            @apply animate-text-gradient-pan;
-        }
-        /* --- End Animated Text --- */
-
-        .btn-primary {
-            @apply px-6 py-3 bg-gradient-to-r from-blue-500 to-teal-500 text-white font-semibold rounded-lg shadow-lg hover:scale-105 transition-all duration-300;
-        }
-        .btn-primary:active {
-            @apply scale-95 shadow-inner;
-        }
-
-        .btn-secondary {
-            @apply px-6 py-3 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 shadow transition-all duration-300 hover:scale-105;
-            @apply dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600;
-        }
-        .btn-secondary:active {
-            @apply scale-95 shadow-inner;
+            animation: text-gradient-pan 6s ease-in-out infinite;
         }
 
         .section-title {
-            @apply text-4xl font-bold text-center mb-10 text-black;
+            @apply text-4xl font-bold text-center mb-12 text-gray-900;
             @apply dark:text-white;
         }
 
+        /* --- Buttons --- */
+        .btn-primary {
+            @apply px-6 py-3 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-teal-500/30 hover:-translate-y-1 transition-all duration-300;
+        }
+        .btn-primary:active { @apply scale-95; }
+
+        .btn-secondary {
+            @apply px-6 py-3 bg-white text-gray-800 border border-gray-200 rounded-lg hover:bg-gray-50 hover:-translate-y-1 shadow-sm transition-all duration-300;
+            @apply dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-700;
+        }
+        .btn-secondary:active { @apply scale-95; }
+
+        .btn-icon {
+            @apply w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-700 hover:bg-teal-500 hover:text-white transition-all duration-300 shadow-sm;
+            @apply dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-teal-500 dark:hover:text-white;
+        }
+
+        /* --- Cards & Inputs --- */
         .card {
-            @apply bg-white/50 backdrop-blur-md rounded-2xl shadow-xl border border-gray-100;
-            @apply dark:bg-gray-800/50 dark:border-gray-700/50;
+            @apply bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 overflow-hidden;
+            @apply dark:bg-gray-800/80 dark:border-gray-700/50;
             @apply transition-all duration-300 ease-in-out;
-            @apply hover:shadow-2xl hover:shadow-teal-500/20 dark:hover:shadow-teal-400/10;
+            @apply hover:shadow-2xl hover:shadow-teal-500/10 dark:hover:shadow-teal-400/10;
         }
 
         .input {
-            @apply w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-teal-400 transition-colors duration-300;
-            @apply dark:bg-gray-700 dark:border-gray-600 dark:text-white;
-            @apply focus:border-transparent focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-900;
+            @apply w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-teal-400 outline-none transition-colors duration-300;
+            @apply dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:border-teal-400;
         }
 
         .label {
-            @apply block text-sm font-medium text-gray-700 mb-2;
+            @apply block text-sm font-semibold text-gray-700 mb-2;
             @apply dark:text-gray-300;
         }
 
         .skill {
-            @apply bg-teal-500/10 text-teal-700 px-4 py-1.5 rounded-full text-sm font-medium;
-            @apply dark:bg-teal-500/20 dark:text-teal-300;
-            @apply transition-all duration-300 ease-in-out;
-        }
-        .skill:hover {
-            @apply scale-110 shadow-md shadow-teal-500/20 dark:shadow-teal-400/10;
+            @apply bg-teal-50 text-teal-700 px-4 py-1.5 rounded-full text-sm font-semibold border border-teal-100;
+            @apply dark:bg-teal-900/30 dark:text-teal-300 dark:border-teal-800;
+            @apply transition-all duration-300 hover:scale-105 cursor-default;
         }
 
-        .alert {
-            @apply p-4 rounded-lg mb-4 text-center font-medium;
-        }
-        .alert.success {
-            @apply bg-green-500/10 text-green-700;
-            @apply dark:bg-green-500/20 dark:text-green-300;
-        }
-        .alert.error {
-            @apply bg-red-500/10 text-red-700;
-            @apply dark:bg-red-500/20 dark:text-red-300;
-        }
+        /* --- Alerts --- */
+        .alert { @apply p-4 rounded-lg mb-4 text-center font-medium; }
+        .alert.success { @apply bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300; }
+        .alert.error { @apply bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300; }
 
+        /* --- Theme Toggle --- */
         .theme-toggle-btn {
             @apply w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300;
-            @apply text-gray-700 hover:bg-gray-100;
+            @apply text-gray-600 hover:bg-gray-200;
             @apply dark:text-gray-300 dark:hover:bg-gray-700;
         }
-        .theme-toggle-btn:active {
-            @apply scale-90;
-        }
 
-        .hover-photo {
-            transition: transform 0.4s ease-out, box-shadow 0.4s ease-out, filter 0.5s ease-out;
-            filter: saturate(100%);
-        }
-        .hover-photo:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(45, 212, 191, 0.5); 
-            filter: saturate(120%); 
-        }
-        
-        /* --- NEW: Custom Cursor Styles --- */
+        /* --- Cursor --- */
         .cursor-dot {
-            @apply w-2 h-2 bg-teal-500 rounded-full;
-            @apply fixed top-0 left-0 -translate-x-1/2 -translate-y-1/2 z-[100];
-            @apply pointer-events-none transition-transform duration-100;
+            @apply w-2 h-2 bg-teal-500 rounded-full fixed top-0 left-0 -translate-x-1/2 -translate-y-1/2 z-[100] pointer-events-none;
         }
         .cursor-outline {
-            @apply w-8 h-8 border-2 border-teal-500 rounded-full;
-            @apply fixed top-0 left-0 -translate-x-1/2 -translate-y-1/2 z-[100];
-            @apply pointer-events-none transition-all duration-300 ease-out;
+            @apply w-8 h-8 border-2 border-teal-500 rounded-full fixed top-0 left-0 -translate-x-1/2 -translate-y-1/2 z-[100] pointer-events-none transition-all duration-200 ease-out;
         }
         .cursor-outline.hovered {
-            @apply scale-150 opacity-50 bg-teal-500/20; /* Grow effect */
+            @apply scale-150 bg-teal-500/10 border-teal-400;
         }
-        /* --- End Cursor Styles --- */
 
-        /* --- NEW: Back to Top Button Styles --- */
+        /* --- Back to Top --- */
         .back-to-top {
-            @apply fixed bottom-6 right-6 w-12 h-12 rounded-full;
-            @apply bg-teal-500/80 text-white backdrop-blur-sm shadow-lg;
-            @apply flex items-center justify-center;
-            @apply opacity-0 pointer-events-none transition-all duration-300;
-            @apply hover:bg-teal-500 hover:scale-110;
+            @apply fixed bottom-8 right-8 w-12 h-12 rounded-full bg-teal-600 text-white shadow-lg flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 z-40 hover:bg-teal-700 hover:-translate-y-1;
         }
         .back-to-top.show {
             @apply opacity-100 pointer-events-auto;
         }
-        /* --- End Back to Top --- */
-
     </style>
 </head>
 
 <body class="antialiased">
 
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
+    <div class="cursor-dot hidden md:block"></div>
+    <div class="cursor-outline hidden md:block"></div>
 
-    <header class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700/50">
+    <header class="bg-white/90 dark:bg-gray-900/90 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-black dark:text-white">MY <span class="text-teal-400">PORTFOLIO</span></a>
-            <div class="hidden md:flex items-center space-x-6">
+            <a href="#" class="text-2xl font-bold text-gray-900 dark:text-white tracking-tighter">
+                MY <span class="text-teal-500">PORTFOLIO</span>
+            </a>
+            
+            <div class="hidden md:flex items-center space-x-8">
                 <a href="#about" class="nav-item">About</a>
                 <a href="#projects" class="nav-item">Projects</a>
                 <a href="#contact" class="nav-item">Contact</a>
@@ -230,74 +189,98 @@
                     <i id="theme-icon-sun-mobile" class="fas fa-sun text-lg"></i>
                     <i id="theme-icon-moon-mobile" class="fas fa-moon text-lg hidden"></i>
                 </button>
-                
-                <button id="mobile-menu-btn" class="text-gray-700 dark:text-gray-300 hover:text-teal-400">
+                <button id="mobile-menu-btn" class="text-gray-700 dark:text-gray-300 hover:text-teal-500">
                     <i class="fas fa-bars text-2xl"></i>
                 </button>
             </div>
         </nav>
 
-        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800">
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 border-t dark:border-gray-700">
             <a href="#about" class="mobile-item">About</a>
             <a href="#projects" class="mobile-item">Projects</a>
             <a href="#contact" class="mobile-item">Contact</a>
         </div>
     </header>
 
-    <main class="container mx-auto px-6 py-12">
+    <main class="container mx-auto px-6">
 
-        <section id="hero" class="min-h-[70vh] flex flex-col md:flex-row items-center justify-between py-20 opacity-0">
-            <div class="md:w-1/2 text-center md:text-left">
-                <span class="text-lg text-teal-400">Hello, I'm</span>
-                <h1 class="text-6xl font-extrabold text-gradient-animated">SUDEESH K</h1> 
-                <h2 id="typing-headline"
-                    class="text-3xl font-medium text-gradient border-r-4 border-teal-400 overflow-hidden whitespace-nowrap h-12 animate-blink-caret mt-4">
-                </h2>
+        <section id="hero" class="min-h-screen flex flex-col md:flex-row items-center justify-between py-20 opacity-0">
+            <div class="md:w-1/2 text-center md:text-left z-10">
+                <span class="text-lg font-semibold text-teal-600 dark:text-teal-400 tracking-wide uppercase">Welcome</span>
+                <h1 class="text-5xl md:text-7xl font-extrabold text-gray-900 dark:text-white mt-2 mb-4 tracking-tight">
+                    I'm <span class="text-gradient-animated">SUDEESH K</span>
+                </h1> 
+                
+                <div class="h-16"> <h2 id="typing-headline" class="text-2xl md:text-3xl font-medium text-gray-600 dark:text-gray-300 border-r-4 border-teal-500 pr-2 inline-block animate-blink-caret">
+                        </h2>
+                </div>
 
-                <p class="text-gray-600 dark:text-gray-400 text-lg mt-4 max-w-lg">
-                    I build beautiful, responsive, and user-centric applications.
+                <p class="text-gray-600 dark:text-gray-400 text-lg mt-6 max-w-lg mx-auto md:mx-0 leading-relaxed">
+                    I build beautiful, responsive, and user-centric applications designed to solve real-world problems.
                 </p>
 
-                <div class="mt-6 flex space-x-4 justify-center md:justify-start">
-                    <a href="#projects" class="btn-primary">View My Work</a>
-                    <a href="#contact" class="btn-secondary">Get In Touch</a>
+                <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                    <a href="#projects" class="btn-primary text-center">View My Work</a>
+                    <a href="#contact" class="btn-secondary text-center">Contact Me</a>
+                </div>
+
+                <div class="mt-10 flex items-center justify-center md:justify-start gap-6">
+                    <a href="Sudeesh Resume NEW.pdf" target="_blank" class="btn-icon group relative" title="Download Resume">
+                        <i class="fas fa-file-alt text-xl"></i>
+                        <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">Resume</span>
+                    </a>
+                    <a href="https://github.com/Sudeesh21" target="_blank" class="btn-icon group relative" title="GitHub Profile">
+                        <i class="fab fa-github text-xl"></i>
+                        <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">GitHub</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/sudeeshk-cse/" target="_blank" class="btn-icon group relative" title="LinkedIn Profile">
+                        <i class="fab fa-linkedin-in text-xl"></i>
+                        <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">LinkedIn</span>
+                    </a>
                 </div>
             </div>
 
-            <div class="md:w-1/2 flex justify-center mt-10 md:mt-0">
-                <div class="w-72 h-71 rounded-full bg-gray-100 dark:bg-gray-800 border-4 border-gray-300/50 dark:border-teal-400/50 flex items-center justify-center overflow-hidden">
-                    
+            <div class="md:w-1/2 flex justify-center mt-12 md:mt-0 relative z-10">
+                <div class="absolute w-72 h-72 bg-teal-500/20 rounded-full blur-3xl -z-10 dark:bg-teal-500/10"></div>
+                
+                <div class="w-71 h-71 md:w-80 md:h-80 rounded-full border-4 border-white dark:border-gray-800 shadow-2xl overflow-hidden relative">
                     <img src="images/Sudeesh Profile Photo.jpeg" 
-                         alt="A photo of Sudeesh K" 
-                         class="w-full h-full object-cover hover-photo">
-
+                         alt="Sudeesh K" 
+                         class="w-68 h-73 object-cover hover-photo">
                 </div>
+            </div>
+
+            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce-slow hidden md:block text-gray-400 dark:text-gray-600">
+                <i class="fas fa-chevron-down text-2xl"></i>
             </div>
         </section>
 
         <section id="about" class="py-24 opacity-0">
             <h2 class="section-title">About <span class="text-gradient">Me</span></h2>
 
-            <div class="card p-10">
-                <div class="flex flex-col md:flex-row gap-10">
-                    
-                    <img src="images/Sudeesh Photo.jpeg"
-                         alt="A professional headshot of Sudeesh K"
-                         class="w-48 h-48 rounded-full border-4 border-gray-200 dark:border-gray-700 shadow-lg mx-auto md:mx-0 hover-photo">
+            <div class="card p-8 md:p-12">
+                <div class="flex flex-col md:flex-row items-center gap-12">
+                    <div class="relative">
+                        <img src="images/Sudeesh Photo.jpeg"
+                             alt="Sudeesh K"
+                             class="w-56 h-56 rounded-2xl object-cover shadow-lg hover-photo rotate-3 hover:rotate-0 transition-all duration-500">
+                    </div>
 
                     <div class="w-full">
-                        <h3 class="text-3xl font-bold text-black dark:text-white mb-4 text-gradient">Who Am I?</h3>
-                        <p class="text-gray-700 dark:text-gray-300 text-lg mb-4">
-                            Hello! I'm Sudeesh, a passionate developer who loves turning ideas into real digital solutions.
+                        <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Who Am I?</h3>
+                        <p class="text-gray-600 dark:text-gray-300 text-lg mb-6 leading-relaxed">
+                            Hello! I'm Sudeesh, a passionate developer who loves turning complex ideas into elegant, real-world digital solutions. I am constantly learning new technologies to improve my craft.
                         </p>
 
-                        <h4 class="text-2xl font-semibold text-black dark:text-white mb-4 text-gradient">Core Skills</h4>
+                        <h4 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Technical Skills</h4>
                         <div class="flex flex-wrap gap-3">
-                            <span class="skill">JavaScript</span>
-                            <span class="skill">React.js</span>
-                            <span class="skill">Node.js</span>
-                            <span class="skill">Tailwind CSS</span>
-                            <span class="skill">Git & GitHub</span>
+                            <span class="skill"><i class="fab fa-js mr-2"></i>JavaScript</span>
+                            <span class="skill"><i class="fab fa-react mr-2"></i>React.js</span>
+                            <span class="skill"><i class="fab fa-node mr-2"></i>Node.js</span>
+                            <span class="skill"><i class="fab fa-python mr-2"></i>Python</span>
+                            <span class="skill"><i class="fas fa-database mr-2"></i>SQL</span>
+                            <span class="skill"><i class="fas fa-code mr-2"></i>Tailwind</span>
+                            <span class="skill"><i class="fab fa-git-alt mr-2"></i>Git</span>
                         </div>
                     </div>
                 </div>
@@ -306,95 +289,127 @@
         
         <section id="projects" class="py-24 opacity-0">
             <h2 class="section-title">My <span class="text-gradient">Projects</span></h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 
-                <div class="card overflow-hidden">
-                    <img src="images/Project-1.png" alt="Project 1" class="w-full h-56 object-cover hover-photo">
+                <div class="card group">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="images/Project-1.png" alt="Custom Dashboard" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <span class="text-white font-semibold">View Details</span>
+                        </div>
+                    </div>
                     <div class="p-6">
-                        <h3 class="text-2xl font-bold text-black dark:text-white mb-2">Project Title One</h3>
-                        <p class="text-gray-600 dark:text-gray-400 mb-4">
-                            A brief description of the project.
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Custom Dashboard Generator</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 h-20 overflow-hidden">
+                            A real-time system monitoring and alerting platform with AI-powered metric prediction using Prometheus and Grafana.
                         </p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="skill">React</span>
-                            <span class="skill">Node.js</span>
+                        
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">Prometheus</span>
+                            <span class="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">Grafana</span>
+                            <span class="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">AI</span>
                         </div>
+
+                        <a href="https://github.com/Sudeesh21/Custom-Dashboard-Generator" target="_blank" class="btn-secondary w-full flex items-center justify-center gap-2 py-2 text-sm">
+                            <i class="fab fa-github"></i> View Code
+                        </a>
                     </div>
                 </div>
-                <div class="card overflow-hidden">
-                    <img src="https://placehold.co/600x400/374151/9ca3af?text=Project+2" alt="Project 2" class="w-full h-56 object-cover hover-photo">
+
+                <div class="card group">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="https://placehold.co/600x400/374151/9ca3af?text=Project+2" alt="Project 2" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    </div>
                     <div class="p-6">
-                        <h3 class="text-2xl font-bold text-black dark:text-white mb-2">Project Title Two</h3>
-                        <p class="text-gray-600 dark:text-gray-400 mb-4">A brief description of the project.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="skill">Vue.js</span>
-                            <span class="skill">Firebase</span>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">E-Commerce App</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 h-20 overflow-hidden">
+                            A fully functional e-commerce application with cart management and payment gateway integration.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">React</span>
+                            <span class="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">Firebase</span>
                         </div>
+                        <a href="#" target="_blank" class="btn-secondary w-full flex items-center justify-center gap-2 py-2 text-sm">
+                            <i class="fab fa-github"></i> View Code
+                        </a>
                     </div>
                 </div>
-                <div class="card overflow-hidden">
-                    <img src="https://placehold.co/600x400/374151/9ca3af?text=Project+3" alt="Project 3" class="w-full h-56 object-cover hover-photo">
+
+                <div class="card group">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="https://placehold.co/600x400/374151/9ca3af?text=Project+3" alt="Project 3" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    </div>
                     <div class="p-6">
-                        <h3 class="text-2xl font-bold text-black dark:text-white mb-2">Project Title Three</h3>
-                        <p class="text-gray-600 dark:text-gray-400 mb-4">A brief description of the project.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="skill">HTML5</span>
-                            <span class="skill">CSS3</span>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Portfolio Website</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 h-20 overflow-hidden">
+                            A responsive personal portfolio website featuring dark mode and interactive UI components.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">HTML</span>
+                            <span class="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">Tailwind</span>
                         </div>
+                        <a href="#" target="_blank" class="btn-secondary w-full flex items-center justify-center gap-2 py-2 text-sm">
+                            <i class="fab fa-github"></i> View Code
+                        </a>
                     </div>
                 </div>
+
             </div>
         </section>
 
         <section id="contact" class="py-24 opacity-0">
             <h2 class="section-title">Get In <span class="text-gradient">Touch</span></h2>
 
-            <div class="card max-w-2xl mx-auto p-10">
-
-                <form id="contact-form">
-
+            <div class="card max-w-xl mx-auto p-8 md:p-10">
+                <form id="contact-form" class="space-y-6">
                     <input type="hidden" id="form-time" name="time">
 
                     <div id="form-success" class="alert success hidden">
-                        Your message has been sent successfully!
+                        <i class="fas fa-check-circle mr-2"></i> Message sent successfully!
                     </div>
-
                     <div id="form-error" class="alert error hidden">
-                        Error sending message. Try again.
+                        <i class="fas fa-exclamation-circle mr-2"></i> Error sending message.
                     </div>
 
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
                             <label class="label">Name</label>
-                            <input class="input" type="text" name="name" required>
+                            <input class="input" type="text" name="name" placeholder="John Doe" required>
                         </div>
-
                         <div>
                             <label class="label">Email</label>
-                            <input class="input" type="email" name="email" required>
+                            <input class="input" type="email" name="email" placeholder="john@example.com" required>
                         </div>
                     </div>
 
-                    <div class="mt-6">
+                    <div>
                         <label class="label">Message</label>
-                        <textarea name="message" rows="5" class="input" required></textarea>
+                        <textarea name="message" rows="5" class="input" placeholder="Your message here..." required></textarea>
                     </div>
 
-                    <button id="submit-btn" type="submit" class="btn-primary w-full mt-6 flex items-center justify-center">
+                    <button id="submit-btn" type="submit" class="btn-primary w-full flex items-center justify-center gap-2">
                         <span id="btn-text">Send Message</span>
-                        <span id="btn-loading" class="hidden ml-2">
+                        <i class="fas fa-paper-plane text-sm"></i>
+                        <span id="btn-loading" class="hidden">
                             <i class="fas fa-spinner animate-spin"></i>
                         </span>
                     </button>
-
                 </form>
             </div>
         </section>
 
     </main>
 
-    <footer class="bg-gray-100 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-6 text-center">
-        <p class="text-gray-600 dark:text-gray-400">&copy; <span id="current-year"></span> SUDEESH K</p>
+    <footer class="bg-gray-100 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-gray-600 dark:text-gray-400 mb-4">&copy; <span id="current-year"></span> SUDEESH K. All rights reserved.</p>
+            <div class="flex justify-center space-x-6">
+                <a href="#" class="text-gray-400 hover:text-teal-500 transition"><i class="fab fa-github text-xl"></i></a>
+                <a href="#" class="text-gray-400 hover:text-teal-500 transition"><i class="fab fa-linkedin text-xl"></i></a>
+                <a href="#" class="text-gray-400 hover:text-teal-500 transition"><i class="fas fa-envelope text-xl"></i></a>
+            </div>
+        </div>
     </footer>
 
     <a href="#" class="back-to-top">
