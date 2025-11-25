@@ -1,34 +1,46 @@
+/* Style.css
+   Contains specific interactive animations and hover effects 
+   that work alongside Tailwind.
+*/
 
-/* Add transitions for the hover effect */
-#about img {
-    transition: transform 0.4s ease-out, box-shadow 0.4s ease-out;
+/* --- Interactive Photo Effects --- */
+#about img, 
+#hero img {
+    transition: transform 0.5s ease-out, box-shadow 0.5s ease-out, filter 0.5s ease-out;
+    filter: brightness(95%);
 }
 
-/* Add a "grow" and "glow" effect on hover */
-#about img:hover {
-    transform: scale(1.05);
-    /* A colorful teal glow */
-    box-shadow: 0 0 30px rgba(45, 212, 191, 0.4); 
+#about img:hover, 
+#hero img:hover {
+    transform: scale(1.03);
+    /* Colorful Glow Effect */
+    box-shadow: 0 0 30px rgba(20, 184, 166, 0.4); /* Teal glow */
+    filter: brightness(105%);
 }
 
-
-/* --- NEW: Interactive Project Card Effects --- */
-
-/* Add a "grow" and "glow" to the card itself on hover */
-#projects .card:hover {
-    transform: translateY(-5px);
-    /* A colorful blue/teal glow */
-    box-shadow: 0 10px 30px rgba(29, 78, 216, 0.2);
+/* --- Project Card Image Zoom --- */
+#projects .card .overflow-hidden img {
+    transition: transform 0.7s ease-in-out;
 }
 
-/* Add transitions for the image inside the card */
-#projects .card img {
-    transition: transform 0.5s ease-out, filter 0.5s ease-out;
-    filter: saturate(100%) brightness(100%); /* Set the default state */
-}
-
-/* On card hover, "grow" and make the image more "colorful" */
-#projects .card:hover img {
+#projects .card:hover .overflow-hidden img {
     transform: scale(1.1);
-    filter: saturate(130%) brightness(1.05); /* More colorful! */
+}
+
+/* --- Custom Scrollbar --- */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+body.dark ::-webkit-scrollbar-track {
+    background: #1f2937;
+}
+::-webkit-scrollbar-thumb {
+    background: #14b8a6; /* Teal */
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #0d9488;
 }
