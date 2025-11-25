@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // --- Theme Toggle Logic ---
+    // --- 1. Theme Toggle Logic ---
     const themeToggleBtn = document.getElementById("theme-toggle-btn");
     const themeToggleBtnMobile = document.getElementById("theme-toggle-btn-mobile");
     const sunIcon = document.getElementById("theme-icon-sun");
@@ -38,10 +38,10 @@ document.addEventListener("DOMContentLoaded", () => {
         themeToggleBtnMobile.addEventListener("click", () => applyTheme(!document.documentElement.classList.contains('dark')));
     }
 
-    // --- Initialize EmailJS ---
+    // --- 2. Initialize EmailJS ---
     emailjs.init("2Rh52yyBQboV6TuSG");
 
-    // --- Mobile Menu ---
+    // --- 3. Mobile Menu ---
     const menuBtn = document.getElementById("mobile-menu-btn");
     const mobileMenu = document.getElementById("mobile-menu");
 
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- Typing Effect ---
+    // --- 4. Typing Effect ---
     const typingText = document.getElementById("typing-headline");
     if (typingText) {
         const words = ["Software Developer", "Front-End Specialist", "UI/UX Enthusiast"];
@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
         type();
     }
 
-    // --- EmailJS Contact Form ---
+    // --- 5. Contact Form ---
     const form = document.getElementById("contact-form");
     const formSuccess = document.getElementById("form-success");
     const formError = document.getElementById("form-error");
@@ -102,9 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (formError) formError.classList.add('hidden');
 
             const formTime = document.getElementById("form-time");
-            if (formTime) {
-                formTime.value = new Date().toLocaleString();
-            }
+            if (formTime) formTime.value = new Date().toLocaleString();
 
             emailjs.sendForm("service_w653grm", "template_kex1yk3", form)
                 .then(() => {
@@ -125,13 +123,11 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- Current Year ---
+    // --- 6. Current Year ---
     const currentYearEl = document.getElementById("current-year");
-    if (currentYearEl) {
-        currentYearEl.textContent = new Date().getFullYear();
-    }
+    if (currentYearEl) currentYearEl.textContent = new Date().getFullYear();
     
-    // --- Fade-in Animations on Scroll ---
+    // --- 7. Fade-in Animations ---
     const animatedSections = document.querySelectorAll('#hero, #about, #projects, #contact');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -144,41 +140,45 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { threshold: 0.1 });
 
     animatedSections.forEach(el => {
-        if (el) {
-            observer.observe(el);
-        }
+        if (el) observer.observe(el);
     });
 
-    // --- NEW: Custom Cursor Logic ---
+    // --- 8. Custom Cursor ---
     const cursorDot = document.querySelector('.cursor-dot');
     const cursorOutline = document.querySelector('.cursor-outline');
 
-    window.addEventListener('mousemove', (e) => {
-        if (cursorDot && cursorOutline) {
-            cursorDot.style.left = `${e.clientX}px`;
-            cursorDot.style.top = `${e.clientY}px`;
-            
-            cursorOutline.animate({
-                left: `${e.clientX}px`,
-                top: `${e.clientY}px`
-            }, { duration: 500, fill: 'forwards' });
-        }
-    });
-
-    const interactiveElements = document.querySelectorAll('a, button, .skill, .theme-toggle-btn, .nav-item');
-    interactiveElements.forEach(el => {
-        el.addEventListener('mouseover', () => {
-            if (cursorOutline) cursorOutline.classList.add('hovered');
+    // Only enable cursor on non-touch devices
+    if (matchMedia('(pointer:fine)').matches) {
+        window.addEventListener('mousemove', (e) => {
+            if (cursorDot && cursorOutline) {
+                cursorDot.style.left = `${e.clientX}px`;
+                cursorDot.style.top = `${e.clientY}px`;
+                
+                // Use Web Animations API for smoother trailing
+                cursorOutline.animate({
+                    left: `${e.clientX}px`,
+                    top: `${e.clientY}px`
+                }, { duration: 500, fill: 'forwards' });
+            }
         });
-        el.addEventListener('mouseout', () => {
-            if (cursorOutline) cursorOutline.classList.remove('hovered');
-        });
-    });
-    // --- End Custom Cursor ---
 
-    // --- NEW: Back to Top Button Logic ---
+        const interactiveElements = document.querySelectorAll('a, button, input, textarea, .skill');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseover', () => {
+                if (cursorOutline) cursorOutline.classList.add('hovered');
+            });
+            el.addEventListener('mouseout', () => {
+                if (cursorOutline) cursorOutline.classList.remove('hovered');
+            });
+        });
+    } else {
+        // Hide custom cursor on mobile
+        if(cursorDot) cursorDot.style.display = 'none';
+        if(cursorOutline) cursorOutline.style.display = 'none';
+    }
+
+    // --- 9. Back to Top ---
     const backToTopButton = document.querySelector('.back-to-top');
-
     if (backToTopButton) {
         window.addEventListener('scroll', () => {
             if (window.scrollY > 300) {
@@ -188,6 +188,4 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
-    // --- End Back to Top ---
-
 });
